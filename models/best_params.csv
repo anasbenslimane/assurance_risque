@@ -1,0 +1,2 @@
+model__n_estimators,model__min_samples_split,model__min_samples_leaf,model__max_features,model__max_depth
+50,50,10,sqrt,15
