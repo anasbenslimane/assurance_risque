@@ -1,0 +1,316 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Historique{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">📋 Historique des prédictions</h1>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+
+<!-- Filtres -->
+<form method="GET" class="row g-3 mb-4">
+
+    <!-- Niveau de risque -->
+    <div class="col-lg-3 col-md-6">
+
+        <label class="form-label fw-semibold">
+            <i class="bi bi-shield-check text-primary me-1"></i>
+            Niveau de risque
+        </label>
+
+        <select name="risk" class="form-select">
+
+            <option value="">Tous les niveaux</option>
+
+            <option value="Faible"
+                {% if selected_risk == "Faible" %}selected{% endif %}>
+                Faible
+            </option>
+
+            <option value="Moyen"
+                {% if selected_risk == "Moyen" %}selected{% endif %}>
+                Moyen
+            </option>
+
+            <option value="Élevé"
+                {% if selected_risk == "Élevé" %}selected{% endif %}>
+                Élevé
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- Décision -->
+    <div class="col-lg-3 col-md-6">
+
+        <label class="form-label fw-semibold">
+            <i class="bi bi-check-circle text-primary me-1"></i>
+            Décision
+        </label>
+
+        <select name="prediction" class="form-select">
+
+            <option value="">Toutes les décisions</option>
+
+            <option value="Claim"
+                {% if selected_prediction == "Claim" %}selected{% endif %}>
+                Claim
+            </option>
+
+            <option value="No Claim"
+                {% if selected_prediction == "No Claim" %}selected{% endif %}>
+                No Claim
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- Marque -->
+    <div class="col-lg-3 col-md-6">
+
+        <label class="form-label fw-semibold">
+            <i class="bi bi-car-front text-primary me-1"></i>
+            Marque
+        </label>
+
+        <select name="brand" class="form-select">
+
+            <option value="">Toutes les marques</option>
+
+            {% for b in brands %}
+
+                <option value="{{ b }}"
+                    {% if selected_brand == b %}selected{% endif %}>
+                    {{ b }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+
+    <!-- Région -->
+    <div class="col-lg-3 col-md-6">
+
+        <label class="form-label fw-semibold">
+            <i class="bi bi-geo-alt text-primary me-1"></i>
+            Région
+        </label>
+
+        <select name="region" class="form-select">
+
+            <option value="">Toutes les régions</option>
+
+            {% for r in regions %}
+
+                <option value="{{ r }}"
+                    {% if selected_region == r %}selected{% endif %}>
+                    {{ r }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+
+    <!-- Date début -->
+    <div class="col-lg-3 col-md-6">
+
+        <label class="form-label fw-semibold">
+            <i class="bi bi-calendar-event text-primary me-1"></i>
+            Date de début
+        </label>
+
+        <input
+            type="date"
+            name="date_from"
+            class="form-control"
+            value="{{ selected_date_from }}"
+        >
+
+    </div>
+
+
+    <!-- Date fin -->
+    <div class="col-lg-3 col-md-6">
+
+        <label class="form-label fw-semibold">
+            <i class="bi bi-calendar-event text-primary me-1"></i>
+            Date de fin
+        </label>
+
+        <input
+            type="date"
+            name="date_to"
+            class="form-control"
+            value="{{ selected_date_to }}"
+        >
+
+    </div>
+
+
+    <!-- Boutons -->
+    <div class="col-lg-6 col-md-12 d-flex align-items-end gap-2">
+
+        <button type="submit" class="btn btn-primary">
+
+            <i class="bi bi-funnel-fill me-1"></i>
+            Filtrer
+
+        </button>
+
+
+        <a href="{% url 'history' %}"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            Réinitialiser
+
+        </a>
+
+    </div>
+
+</form>
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <h6 class="mb-0 text-muted">
+
+        <i class="bi bi-list-check me-1"></i>
+
+        {{ result_count }} prédiction{{ result_count|pluralize }} trouvée{{ result_count|pluralize }}
+
+    </h6>
+
+</div>
+
+
+
+        <table class="table table-striped table-hover align-middle">
+
+    <thead class="table-primary">
+
+        <tr>
+            <th>Date</th>
+            <th>Exposition</th>
+            <th>Conducteur</th>
+            <th>Âge véhicule</th>
+            <th>Marque</th>
+            <th>Carburant</th>
+            <th>Puissance</th>
+            <th>Bonus</th>
+            <th>Région</th>
+            <th>Zone</th>
+            <th>Densité</th>
+            <th>Probabilité</th>
+            <th>Risque</th>
+            <th>Décision</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for p in predictions %}
+
+        <tr>
+
+            <td>{{ p.created_at|date:"d/m/Y H:i" }}</td>
+
+            <td>
+    {% if p.Exposure == 0 %}
+        0 mois
+    {% elif p.Exposure == 0.25 %}
+        3 mois
+    {% elif p.Exposure == 0.5 %}
+        6 mois
+    {% elif p.Exposure == 0.75 %}
+        9 mois
+    {% elif p.Exposure == 1 %}
+        1 an
+    {% else %}
+        {{ p.Exposure }} an
+    {% endif %}
+</td>
+
+            <td>{{ p.DrivAge }} ans</td>
+
+            <td>{{ p.VehAge }} ans</td>
+
+            <td>{{ p.VehBrand }}</td>
+
+            <td>{{ p.VehGas }}</td>
+
+            <td>{{ p.VehPower }}</td>
+
+            <td>{{ p.BonusMalus }}</td>
+
+            <td>{{ p.Region }}</td>
+
+            <td>{{ p.Area }}</td>
+
+            <td>{{ p.Density }}</td>
+
+            <td>{{ p.claim_probability }}%</td>
+
+            <td>
+
+                {% if p.risk_level == "Élevé" %}
+                    <span class="badge bg-danger">Élevé</span>
+
+                {% elif p.risk_level == "Moyen" %}
+                    <span class="badge bg-warning text-dark">Moyen</span>
+
+                {% else %}
+                    <span class="badge bg-success">Faible</span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {% if p.prediction == "Claim" %}
+                    <span class="badge bg-danger">Claim</span>
+
+                {% else %}
+                    <span class="badge bg-success">No Claim</span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+            <td colspan="13" class="text-center">
+                Aucune prédiction enregistrée.
+            </td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+    </div>
+
+</div>
+
+{% endblock %}

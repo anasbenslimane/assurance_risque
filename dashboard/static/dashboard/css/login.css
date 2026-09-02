@@ -1,0 +1,422 @@
+/* =========================================
+   PAGE DE CONNEXION - ASSURANCE ANAS
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #eef4fb;
+    color: #172b4d;
+}
+
+/* =========================================
+   CONTENEUR PRINCIPAL
+   ========================================= */
+
+.login-page {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+/* Grande carte */
+.login-container {
+    width: 100%;
+    max-width: 1400px;
+
+    height: calc(100vh - 40px);
+    max-height: 850px;
+
+    display: grid;
+    grid-template-columns: 42% 58%;
+
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+
+    box-shadow: 0 20px 60px rgba(30, 70, 120, 0.15);
+}
+
+/* =========================================
+   PARTIE GAUCHE
+   ========================================= */
+
+.login-left {
+    padding: 35px 55px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background: #ffffff;
+}
+
+/* Logo */
+.logo-area {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.logo-icon {
+    width: 60px;
+    height: 60px;
+
+    margin: 0 auto 12px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eaf3ff;
+    color: #1268d6;
+
+    font-size: 30px;
+}
+
+.logo-area h1 {
+    margin: 0;
+
+    color: #12345b;
+
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.logo-area p {
+    margin: 6px 0 0;
+
+    color: #65758b;
+
+    font-size: 15px;
+}
+
+/* Séparation */
+.login-divider {
+    height: 1px;
+
+    background: #e2e8f0;
+
+    margin: 18px 0 22px;
+}
+
+/* =========================================
+   BIENVENUE
+   ========================================= */
+
+.welcome {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.welcome h2 {
+    margin: 0 0 8px;
+
+    color: #173b69;
+
+    font-size: 23px;
+}
+
+.welcome p {
+    margin: 0;
+
+    color: #64748b;
+
+    line-height: 1.5;
+
+    font-size: 14px;
+}
+
+/* =========================================
+   FORMULAIRE
+   ========================================= */
+
+.login-form {
+    width: 100%;
+}
+
+/* Labels */
+.form-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #263b55;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Champs */
+.form-control {
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 15px;
+
+    border: 1px solid #d7e0ea;
+    border-radius: 9px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #1769e0;
+
+    box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.12);
+}
+
+/* Groupe champ */
+.form-group {
+    margin-bottom: 16px;
+}
+
+/* =========================================
+   BOUTON
+   ========================================= */
+
+.login-button {
+    width: 100%;
+    height: 50px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #1769e0;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.login-button:hover {
+    background: #1258bf;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 8px 20px rgba(23, 105, 224, 0.25);
+}
+
+/* =========================================
+   ERREUR
+   ========================================= */
+
+.login-error {
+    padding: 10px 13px;
+
+    margin-bottom: 15px;
+
+    border-radius: 8px;
+
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+
+    color: #be123c;
+
+    font-size: 13px;
+}
+
+/* =========================================
+   SÉCURITÉ
+   ========================================= */
+
+.security {
+    margin-top: 18px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid #e5eaf0;
+
+    text-align: center;
+
+    color: #718096;
+
+    font-size: 12px;
+}
+
+.security i {
+    margin-right: 6px;
+    color: #1769e0;
+}
+
+/* =========================================
+   PARTIE DROITE
+   ========================================= */
+
+.login-right {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 45px 60px;
+
+    color: white;
+
+    /* Dégradé professionnel */
+    background:
+        linear-gradient(
+            135deg,
+            #165da8,
+            #2f80c9
+        );
+}
+
+/* Contenu droite */
+.right-content {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 650px;
+
+    margin: auto;
+}
+
+.right-content h2 {
+    font-size: 40px;
+    line-height: 1.15;
+
+    margin: 0 0 18px;
+
+    font-weight: 700;
+}
+
+.right-content h2 span {
+    color: #dceeff;
+}
+
+.right-content > p {
+    font-size: 17px;
+    line-height: 1.55;
+
+    color: #e7f2ff;
+
+    margin: 0 0 30px;
+}
+
+/* =========================================
+   FONCTIONNALITÉS
+   ========================================= */
+
+.features {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 14px;
+}
+
+.feature {
+    padding: 18px;
+
+    border-radius: 13px;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    backdrop-filter: blur(8px);
+}
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+
+    margin-bottom: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.18);
+
+    font-size: 19px;
+}
+
+.feature h3 {
+    margin: 0 0 6px;
+
+    font-size: 15px;
+}
+
+.feature p {
+    margin: 0;
+
+    color: #e4f1ff;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+/* =========================================
+   PETITS ÉCRANS
+   ========================================= */
+
+@media (max-width: 1000px) {
+
+    .login-page {
+        padding: 15px;
+    }
+
+    .login-container {
+        height: auto;
+        min-height: calc(100vh - 30px);
+
+        grid-template-columns: 1fr;
+    }
+
+    .login-right {
+        display: none;
+    }
+
+    .login-left {
+        padding: 40px 35px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .login-page {
+        padding: 10px;
+    }
+
+    .login-container {
+        border-radius: 15px;
+    }
+
+    .login-left {
+        padding: 30px 22px;
+    }
+
+    .logo-area h1 {
+        font-size: 27px;
+    }
+}

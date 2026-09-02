@@ -1,0 +1,276 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<style>
+.stat-card{
+    border:none;
+    border-radius:18px;
+    color:white;
+    transition:.35s;
+    cursor:pointer;
+    overflow:hidden;
+}
+
+.stat-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
+}
+
+.bg-blue{
+    background:linear-gradient(135deg,#0d6efd,#4e73df);
+}
+
+.bg-green{
+    background:linear-gradient(135deg,#198754,#34c759);
+}
+
+.bg-red{
+    background:linear-gradient(135deg,#dc3545,#ff6b6b);
+}
+
+.bg-purple{
+    background:linear-gradient(135deg,#6f42c1,#9b59b6);
+}
+
+.action-card{
+    border-radius:18px;
+    transition:.3s;
+}
+
+.action-card:hover{
+    transform:scale(1.04);
+}
+</style>
+
+<h1 class="mb-4">
+    <i class="bi bi-grid-1x2-fill text-primary me-2"></i>
+    Tableau de bord
+</h1>
+
+<p class="text-muted">
+    Bienvenue sur votre espace Agent Assurance.
+</p>
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-blue text-center p-3">
+            <h2><i class="bi bi-file-earmark-text fs-1"></i></h2>
+            <h3>{{ total_contracts|floatformat:0 }}</h3>
+            <p>Contrats analysés</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-green text-center p-3">
+            <h2><i class="bi bi-percent fs-1"></i></h2>
+            <h3>{{ claim_rate }}%</h3>
+            <p>Taux de sinistre</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-red text-center p-3">
+            <h2><i class="bi bi-cash-stack fs-1"></i></h2>
+            <h3>{{ total_claim_amount|floatformat:0 }} €</h3>
+            <p>Montant total des sinistres</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-purple text-center p-3">
+            <h2><i class="bi bi-graph-up-arrow fs-1"></i></h2>
+            <h3>{{ avg_claim_amount|floatformat:0 }} €</h3>
+            <p>Coût moyen par sinistre</p>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-blue text-center p-3">
+            <h2><i class="bi bi-files fs-1"></i></h2>
+            <h3>{{ total_predictions }}</h3>
+            <p>Total des prédictions</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-green text-center p-3">
+            <h2><i class="bi bi-shield-check fs-1"></i></h2>
+            <h3>{{ total_no_claim }}</h3>
+            <p>No Claim</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-red text-center p-3">
+            <h2><i class="bi bi-exclamation-triangle fs-1"></i></h2>
+            <h3>{{ total_claim }}</h3>
+            <p>Claim</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-purple text-center p-3">
+            <h2><i class="bi bi-speedometer2 fs-1"></i></h2>
+            <h3>{{ avg_risk }}%</h3>
+            <p>Risque moyen</p>
+        </div>
+    </div>
+
+</div>
+
+<h3 class="mb-3">
+    <i class="bi bi-speedometer text-primary me-2"></i>
+    Actions rapides
+</h3>
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-4">
+        <a href="{% url 'prediction' %}" class="text-decoration-none text-dark">
+            <div class="card shadow text-center p-4 h-100">
+                <h2><i class="bi bi-robot fs-1 text-primary"></i></h2>
+                <h5>Nouvelle prédiction</h5>
+                <p>Analyser un nouveau contrat.</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{% url 'analysis' %}" class="text-decoration-none text-dark">
+            <div class="card shadow text-center p-4 h-100">
+                <h2><i class="bi bi-graph-up fs-1 text-primary"></i></h2>
+                <h5>Analyse</h5>
+                <p>Consulter les statistiques.</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{% url 'history' %}" class="text-decoration-none text-dark">
+            <div class="card shadow text-center p-4 h-100">
+                <h2><i class="bi bi-clock-history fs-1 text-primary"></i></h2>
+                <h5>Historique</h5>
+                <p>Voir les anciennes prédictions.</p>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+<h3 class="mb-3">
+    <i class="bi bi-pie-chart-fill text-primary me-2"></i>
+    Répartition des prédictions
+</h3>
+
+<div class="card shadow border-0 mb-5">
+    <div class="card-body">
+        <div style="max-width:380px;height:280px;margin:auto;">
+            <canvas id="claimChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<h3 class="mb-3">
+    <i class="bi bi-clock-history text-primary me-2"></i>
+    Dernières prédictions
+</h3>
+
+<div class="card shadow border-0">
+
+    <div class="card-body">
+
+        <table class="table table-hover align-middle">
+
+            <thead class="table-primary">
+                <tr>
+                    <th>Date</th>
+                    <th>Conducteur</th>
+                    <th>Bonus</th>
+                    <th>Risque</th>
+                    <th>Décision</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for p in latest_predictions %}
+
+                <tr>
+                    <td>{{ p.created_at|date:"d/m/Y H:i" }}</td>
+                    <td>{{ p.DrivAge }} ans</td>
+                    <td>{{ p.BonusMalus }}</td>
+                    <td>{{ p.claim_probability }}%</td>
+                    <td>
+                        {% if p.prediction == "Claim" %}
+                            <span class="badge bg-danger">Claim</span>
+                        {% else %}
+                            <span class="badge bg-success">No Claim</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Aucune prédiction.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById("claimChart");
+
+new Chart(ctx, {
+    type: "doughnut",
+
+    data: {
+        labels: ["Claim", "No Claim"],
+
+        datasets: [{
+            data: [
+                {{ total_claim }},
+                {{ total_no_claim }}
+            ],
+            backgroundColor: [
+                "#dc3545",
+                "#198754"
+            ],
+            borderWidth: 0
+        }]
+    },
+
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: {
+                position: "bottom"
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

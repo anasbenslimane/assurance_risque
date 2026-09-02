@@ -1,0 +1,320 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Analyse{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    <i class="bi bi-bar-chart-line-fill text-primary me-2"></i>
+    Centre d'analyse des risques
+</h1>
+
+<p class="text-muted mb-5">
+Analyse statistique des contrats d'assurance automobile.
+</p>
+
+<div class="row g-4">
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body">
+
+                <h5>
+                    <i class="bi bi-person text-primary me-2"></i>
+                    Risque par âge
+                </h5>
+
+                <canvas id="ageChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body">
+
+                <h5>
+                    <i class="bi bi-award text-primary me-2"></i>
+                    Bonus-Malus
+                </h5>
+
+                <canvas id="bonusChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body">
+
+                <h5>
+                    <i class="bi bi-fuel-pump text-primary me-2"></i>
+                    Répartition du carburant
+                </h5>
+
+                <div style="max-width:300px;height:250px;margin:auto;">
+                    <canvas id="fuelChart"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body">
+
+                <h5>
+                    <i class="bi bi-globe-europe-africa text-primary me-2"></i>
+                    Top 10 des régions les plus risquées
+                </h5>
+
+                <canvas id="regionChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+       <!-- Âge du véhicule -->
+<div class="col-lg-6">
+    <div class="card shadow border-0">
+        <div class="card-body">
+            <h5>
+                <i class="bi bi-car-front text-primary me-2"></i>
+                Risque selon l'âge du véhicule
+            </h5>
+            <canvas id="vehAgeChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Marques -->
+<div class="col-lg-6">
+    <div class="card shadow border-0">
+        <div class="card-body">
+            <h5>
+                <i class="bi bi-tags text-primary me-2"></i>
+                Marques les plus représentées
+            </h5>
+            <canvas id="brandChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Puissance -->
+<div class="col-lg-6">
+    <div class="card shadow border-0">
+        <div class="card-body">
+            <h5>
+                <i class="bi bi-lightning-charge text-primary me-2"></i>
+                Risque selon la puissance
+            </h5>
+            <canvas id="powerChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Claim vs No Claim -->
+<div class="col-lg-6">
+    <div class="card shadow border-0">
+        <div class="card-body">
+            <h5>
+                <i class="bi bi-pie-chart text-primary me-2"></i>
+                Contrats avec et sans sinistre
+            </h5>
+            <div style="max-width:300px;height:250px;margin:auto;">
+                <canvas id="claimChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{{ age_labels|json_script:"age-labels" }}
+{{ age_values|json_script:"age-values" }}
+{{ bonus_labels|json_script:"bonus-labels" }}
+{{ bonus_values|json_script:"bonus-values" }}
+{{ fuel_labels|json_script:"fuel-labels" }}
+{{ fuel_values|json_script:"fuel-values" }}
+{{ region_labels|json_script:"region-labels" }}
+{{ region_values|json_script:"region-values" }}
+{{ vehage_labels|json_script:"vehage-labels" }}
+{{ vehage_values|json_script:"vehage-values" }}
+
+{{ brand_labels|json_script:"brand-labels" }}
+{{ brand_values|json_script:"brand-values" }}
+
+{{ power_labels|json_script:"power-labels" }}
+{{ power_values|json_script:"power-values" }}
+
+{{ claim_labels|json_script:"claim-labels" }}
+{{ claim_values|json_script:"claim-values" }}
+
+<script>
+
+function get(id){
+    return JSON.parse(document.getElementById(id).textContent);
+}
+
+new Chart(document.getElementById("ageChart"),{
+    type:"bar",
+    data:{
+        labels:get("age-labels"),
+        datasets:[{
+            label:"Risque (%)",
+            data:get("age-values"),
+            backgroundColor:"#0d6efd"
+        }]
+    }
+});
+
+new Chart(document.getElementById("bonusChart"),{
+    type:"bar",
+    data:{
+        labels:get("bonus-labels"),
+        datasets:[{
+            label:"Risque (%)",
+            data:get("bonus-values"),
+            backgroundColor:"#6f42c1"
+        }]
+    }
+});
+
+new Chart(document.getElementById("fuelChart"),{
+    type:"doughnut",
+    data:{
+        labels:get("fuel-labels"),
+        datasets:[{
+            data:get("fuel-values"),
+            backgroundColor:["#198754","#0d6efd"]
+        }]
+    }
+});
+
+new Chart(document.getElementById("regionChart"),{
+    type:"bar",
+    data:{
+        labels:get("region-labels"),
+        datasets:[{
+            label:"Risque (%)",
+            data:get("region-values"),
+            backgroundColor:"#dc3545"
+        }]
+    },
+    options:{
+        indexAxis:"y"
+    }
+});
+
+// =========================
+// Risque selon l'âge du véhicule
+// =========================
+
+new Chart(document.getElementById("vehAgeChart"),{
+    type:"bar",
+    data:{
+        labels:get("vehage-labels"),
+        datasets:[{
+            label:"Risque (%)",
+            data:get("vehage-values"),
+            backgroundColor:"#20c997"
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{
+            legend:{display:false}
+        }
+    }
+});
+
+// =========================
+// Marques les plus représentées
+// =========================
+
+new Chart(document.getElementById("brandChart"),{
+    type:"bar",
+    data:{
+        labels:get("brand-labels"),
+        datasets:[{
+            label:"Nombre de contrats",
+            data:get("brand-values"),
+            backgroundColor:"#0dcaf0"
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{
+            legend:{display:false}
+        }
+    }
+});
+
+// =========================
+// Risque selon la puissance
+// =========================
+
+new Chart(document.getElementById("powerChart"),{
+    type:"line",
+    data:{
+        labels:get("power-labels"),
+        datasets:[{
+            label:"Risque (%)",
+            data:get("power-values"),
+            borderColor:"#fd7e14",
+            backgroundColor:"rgba(253,126,20,0.2)",
+            tension:.3,
+            fill:true
+        }]
+    },
+    options:{
+        responsive:true
+    }
+});
+
+// =========================
+// Contrats avec / sans sinistre
+// =========================
+
+new Chart(document.getElementById("claimChart"),{
+    type:"doughnut",
+    data:{
+        labels:get("claim-labels"),
+        datasets:[{
+            data:get("claim-values"),
+            backgroundColor:["#198754","#dc3545"]
+        }]
+    },
+    options:{
+        responsive:true
+    }
+});
+
+</script>
+
+{% endblock %}
