@@ -83,3 +83,32 @@ freMTPL2sev.csv
 - Git
 - GitHub
 - Visual Studio Code
+
+
+## Aperçu de la plateforme
+
+### Page de connexion
+
+![Page de connexion](screenshots/login.png)
+
+### Tableau de bord
+
+![Tableau de bord - Vue 1](screenshots/dashboard1.png)
+
+![Tableau de bord - Vue 2](screenshots/dashboard2.png)
+
+### Prédiction du risque
+
+![Prédiction - Vue 1](screenshots/prediction1.png)
+
+![Prédiction - Vue 2](screenshots/prediction2.png)
+
+### Analyse statistique
+
+![Analyse - Vue 1](screenshots/analysis1.png)
+
+![Analyse - Vue 2](screenshots/analysis2.png)
+
+### Historique des prédictions
+
+![Historique des prédictions](screenshots/history.png)
