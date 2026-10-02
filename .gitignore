@@ -7,6 +7,8 @@ __pycache__/
 .ipynb_checkpoints/
 # Variables d'environnement
 .env
+# Base de données locale Django
+*.sqlite3
 # Fichiers système
 .DS_Store
 Thumbs.db
