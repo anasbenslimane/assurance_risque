@@ -53,6 +53,70 @@ Deux sources principales sont utilisées :
 freMTPL2freq.csv
 freMTPL2sev.csv
 ```
+
+## Méthodologie Data Science et Machine Learning
+
+Le projet suit une démarche complète de Data Science, depuis l'exploration des données jusqu'à l'intégration du modèle de Machine Learning dans la plateforme web.
+
+### 1. Audit et exploration des données
+
+Une première analyse des données a été réalisée afin de :
+
+- vérifier la structure et les dimensions des datasets ;
+- identifier les valeurs manquantes et les doublons ;
+- analyser les variables disponibles ;
+- étudier la distribution des sinistres ;
+- identifier les principales caractéristiques des contrats d'assurance.
+
+### 2. Nettoyage et préparation des données
+
+Les données ont ensuite été nettoyées et préparées pour la modélisation :
+
+- traitement des valeurs aberrantes ;
+- vérification des doublons ;
+- préparation des variables numériques et catégorielles ;
+- fusion des données de fréquence et de sévérité ;
+- création de la variable cible `HasClaim`.
+
+La variable `HasClaim` permet de distinguer les contrats associés à un sinistre (`Claim`) des contrats sans sinistre (`No Claim`).
+
+### 3. Feature Engineering
+
+Une étape de Feature Engineering a été réalisée afin de transformer et préparer les variables nécessaires à la modélisation.
+
+Cette étape comprend notamment la préparation des caractéristiques liées au conducteur, au véhicule et au contrat d'assurance.
+
+### 4. Modélisation
+
+Plusieurs algorithmes de Machine Learning ont été étudiés et comparés :
+
+- Régression Logistique ;
+- Decision Tree ;
+- Random Forest.
+
+Une attention particulière a été portée au déséquilibre entre les classes `Claim` et `No Claim`.
+
+### 5. Optimisation du modèle
+
+Le modèle Random Forest a ensuite été optimisé à l'aide d'une recherche d'hyperparamètres avec `RandomizedSearchCV` et une validation croisée.
+
+Le modèle final retenu est ensuite sauvegardé afin de pouvoir être utilisé directement par la plateforme Django.
+
+### 6. Intégration dans la plateforme web
+
+Le modèle optimisé est intégré à l'application Django.
+
+L'Agent Assurance peut ainsi :
+
+- saisir les caractéristiques d'un contrat ;
+- obtenir une prédiction `Claim` ou `No Claim` ;
+- consulter la probabilité de sinistre ;
+- analyser différents facteurs de risque ;
+- consulter l'historique des prédictions.
+
+
+
+
 ## Technologies utilisées
 
 ### Data Science et Machine Learning
